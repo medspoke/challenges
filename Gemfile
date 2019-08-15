@@ -34,6 +34,7 @@ end
 
 group :test do
   gem 'factory_girl_rails'
+  gem 'faker'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 3.5.0'
   gem 'rspec', '~> 3.5.0'
