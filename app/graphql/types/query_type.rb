@@ -4,4 +4,5 @@ class Types::QueryType < Types::BaseObject
   # They will be entry points for queries on your schema.
 
   field :users, resolver: Resolvers::GetUsers
+  field :posts, resolver: Resolvers::GetPosts
 end
