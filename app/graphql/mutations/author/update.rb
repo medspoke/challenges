@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class Mutations::Author::Update < Mutations::Rescuable
   argument :id, ID, required: true
-  argument :data, Types::Input::AuthorInputType
+  argument :data, Types::Input::AuthorInputType, required: true
+
   type Types::AuthorType
 
   def resolve(**args)

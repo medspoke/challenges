@@ -35,7 +35,7 @@ You need to have following tools installed:
   * The response should include `totalCached` field which would inform users about number of Images that we currently have in our database
 
 2. We've already got mutations for creating both Images and Authors via our own API, but they're missing option to bind Author with Image. Let's fix that:
-  * Edit mutations `CreateImage` and `UpdateImage` to allow adding new or assigning existing Author for given Image
+  * Edit mutations `CreateImage` and `UpdateImage` to allow assigning existing Author for given Image
   * Add tests for both mutations
 
 3. When adding a test during previous challenge, you've probably realized that one of the developers left some of the tests failing. Shame on him! But no hurt feelings, let's help him by fixing the tests :)

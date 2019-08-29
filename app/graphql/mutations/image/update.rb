@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class Mutations::Image::Update < Mutations::Rescuable
   argument :id, ID, required: true
-  argument :data, Types::Input::ImageInputType
+  argument :data, Types::Input::ImageInputType, required: true
+
   type Types::ImageType
 
   def resolve(**args)
