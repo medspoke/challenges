@@ -6,6 +6,7 @@ class Types::ImageType < Types::BaseObject
   field :description, String
   field :height, Integer, null: false
   field :width, Integer, null: false
+  field :source, String
   field :author, Types::AuthorType
   field :url, Types::ImageUrlType,
     resolve: -> (image, _args, _ctx) do
