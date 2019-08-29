@@ -33,21 +33,23 @@ You need to have following tools installed:
   * By default, query should simply return first 10 images
   * It should take `page` and `perPage` params which would respectively change current page and page size
   * The response should include `totalCached` field which would inform users about number of Images that we currently have in our database
+  
+2. Try to load collection of images along with their authors. It works, but it's not done in an efficient way. Let's try to optimize it. 
 
-2. We've already got mutations for creating both Images and Authors via our own API, but they're missing option to bind Author with Image. Let's fix that:
+3. We've already got mutations for creating both Images and Authors via our own API, but they're missing option to bind Author with Image. Let's fix that:
   * Edit mutations `CreateImage` and `UpdateImage` to allow assigning existing Author for given Image
   * Add tests for both mutations
 
-3. When adding a test during previous challenge, you've probably realized that one of the developers left some of the tests failing. Shame on him! But no hurt feelings, let's help him by fixing the tests :)
+4. When adding a test during previous challenge, you've probably realized that one of the developers left some of the tests failing. Shame on him! But no hurt feelings, let's help him by fixing the tests :)
 
-4. Our collection of images is unfortunately quite small, but we can use external APIs to fix that! Let's implement lazy loading of images from Unsplash API:
+5. Our collection of images is unfortunately quite small, but we can use external APIs to fix that! Let's implement lazy loading of images from Unsplash API:
   * Whenever user queries for images, we return whatever we currently have in our database
   * If we don't have enough images to fulfill user's query:
     * We make a call to Unsplash API (https://unsplash.com/documentation#list-photos)
     * We save additional images in our own database *along with author and source information* (make sure we don't duplicate any images)
   * We return all requested images from our database to the user
 
-5. *[BONUS]* Lazy loading of Images is cool, but after some time we will end up with a lot of images, so it will be hard to browse them through. We also would like to get rid of images that are not really liked by the users. Please add an upvoting & cleanup system which would work as following:
+6. *[BONUS]* Lazy loading of Images is cool, but after some time we will end up with a lot of images, so it will be hard to browse them through. We also would like to get rid of images that are not really liked by the users. Please add an upvoting & cleanup system which would work as following:
   * It should save original number of likes for every image when it's being grabbed from the source (Unsplash)
   * It should have mutation which allows our own users to upvote images
   * It should have a background task which would be run once a week and delete all photos that were not upvoted at least 1 time
