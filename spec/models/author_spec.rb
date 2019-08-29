@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 describe Author, type: :model do
   describe 'Relations' do
-    it { is_expected.to has_many(:image) }
+    it { is_expected.to have_many(:images) }
   end
 
   describe 'Validations' do
