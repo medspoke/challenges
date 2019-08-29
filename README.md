@@ -47,10 +47,10 @@ You need to have following tools installed:
     * We save additional images in our own database *along with author and source information* (make sure we don't duplicate any images)
   * We return all requested images from our database to the user
 
-5. *[BONUS]* Lazy loading of Images is cool, but after some time we will end up with a lot of images, so it will be hard to browse through. We also would like to get rid of images that not really liked by the users. Please add and upvoting & cleanup system which would work as following:
-  * It should save original number of likes for every images when grabbed from the source (Unsplash)
-  * It should also allow our users to upvote images
-  * It should have a background task which would be run once a week and delete all photos that nobody upvoted
+5. *[BONUS]* Lazy loading of Images is cool, but after some time we will end up with a lot of images, so it will be hard to browse them through. We also would like to get rid of images that are not really liked by the users. Please add an upvoting & cleanup system which would work as following:
+  * It should save original number of likes for every image when it's being grabbed from the source (Unsplash)
+  * It should have mutation which allows our own users to upvote images
+  * It should have a background task which would be run once a week and delete all photos that were not upvoted at least 1 time
 
 ## Additional Information
 
