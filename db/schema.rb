@@ -10,27 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_28_125948) do
+ActiveRecord::Schema.define(version: 2019_08_29_095557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "posts", force: :cascade do |t|
-    t.bigint "user_id"
-    t.string "title"
-    t.text "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_posts_on_user_id"
-  end
-
-  create_table "users", force: :cascade do |t|
+  create_table "authors", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "source"
+    t.string "source_id"
   end
 
-  add_foreign_key "posts", "users"
+  create_table "images", force: :cascade do |t|
+    t.string "source"
+    t.string "source_id"
+    t.text "description"
+    t.integer "height", null: false
+    t.integer "width", null: false
+    t.string "raw_url", null: false
+    t.string "small_url"
+    t.string "thumb_url"
+    t.bigint "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_images_on_author_id"
+  end
+
+  add_foreign_key "images", "authors"
 end

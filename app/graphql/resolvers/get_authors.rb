@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-class Resolvers::GetUsers < Base::Resolver
+class Resolvers::GetAuthors < Base::Resolver
   argument :search, String
 
-  type [Types::UserType]
+  type [Types::AuthorType]
 
   def resolve(**args)
-    scope = User.all
+    scope = Author.all
     scope = scope.search(args[:search]) if args[:search].present?
     scope
   end
