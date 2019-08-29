@@ -6,7 +6,13 @@ class Types::ImageType < Types::BaseObject
   field :description, String
   field :height, Integer, null: false
   field :width, Integer, null: false
-  field :raw_url, String, null: false
-  field :small_url, String
-  field :thumb_url, String
+  field :author, Types::AuthorType
+  field :url, Types::ImageUrlType,
+    resolve: -> (image, _args, _ctx) do
+      OpenStruct.new(
+        raw: image.raw_url,
+        small: image.small_url,
+        thumb: image.thumb_url
+      )
+    end
 end

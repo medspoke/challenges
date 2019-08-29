@@ -3,7 +3,14 @@ require 'faker'
 30.times do |i|
   puts "Creating #{i + 1} author"
 
-  author = Author.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email)
+  first_name = Faker::Name.first_name
+  last_name = Faker::Name.unique.last_name
+
+  author = Author.create!(
+    username: "#{first_name}_#{last_name}".downcase,
+    first_name: first_name,
+    last_name: last_name
+  )
 
   3.times do |j|
     puts "Creating #{j + 1} image for #{i + 1} author"
