@@ -1,260 +1,99 @@
 # MedSpoke Rails Challenge
 
 ## Description
-This branch includes boilerplate for your challenge so feel free to clone it, set it up, run `rails db:seed` and you are ready!
 
-## Project
+This project is a Rails application allowing users to query for nice pictures that they would like to use in their own app. The core idea is to reuse publicly available Image APIs to curate our own amazing collection of images - and serve them to our users.
+
+This is not a production project, and it's used for purpose of interviewing. Please read everything carefully before starting challenges, as below we will explain in detail how to run the project, what's expected and how to submit the results.
+
+## Getting Started
+
+### Requirements
+
+You need to have following tools installed:
+
 - rails 5.2.3
 - ruby 2.5.1
 - graphql
+- postgresql
 
-## Tools
+### Development
+
+1. Clone the project
+2. Install all required technologies
+3. Install dependencies: ```gem install bundler && bundle install```
+4. Setup database: ```bundle exec rails db:setup```
+5. Start the server: ```bundle exec rails s```
+
+*If you using `GraphiQL app` for testing be sure to rather run the server using `rails s -b 127.0.0.1 -p 3000` otherwise you'll see the error in app*
+
+## Challenges
+
+1. Currently `GetImages` query returns all images in the database. That's not really scalable, so let's add a pagination.
+  * By default, query should simply return first 10 images
+  * It should take `page` and `perPage` params which would respectively change current page and page size
+  * The response should include `totalCached` field which would inform users about number of Images that we currently have in our database
+
+2. We've already got mutations for creating both Images and Authors via our own API, but they're missing option to bind Author with Image. Let's fix that:
+  * Edit mutations `CreateImage` and `UpdateImage` to allow adding new or assigning existing Author for given Image
+  * Add tests for both mutations
+
+3. When adding a test during previous challenge, you've probably realized that one of the developers left some of the tests failing. Shame on him! But no hurt feelings, let's help him by fixing the tests :)
+
+4. Our collection of images is unfortunately quite small, but we can use external APIs to fix that! Let's implement lazy loading of images from Unsplash API:
+  * Whenever user queries for images, we return whatever we currently have in our database
+  * If we don't have enough images to fulfill user's query:
+    * We make a call to Unsplash API (https://unsplash.com/documentation#list-photos)
+    * We save additional images in our own database *along with author and source information* (make sure we don't duplicate any images)
+  * We return all requested images from our database to the user
+
+5. *[BONUS]* Lazy loading of Images is cool, but after some time we will end up with a lot of images, so it will be hard to browse through. We also would like to get rid of images that not really liked by the users. Please add and upvoting & cleanup system which would work as following:
+  * It should save original number of likes for every images when grabbed from the source (Unsplash)
+  * It should also allow our users to upvote images
+  * It should have a background task which would be run once a week and delete all photos that nobody upvoted
+
+## Additional Information
+
+### Tools
+
+Usefull tools for development:
+
 - [GraphiQL app](https://electronjs.org/apps/graphiql) (we highly recommend to use this GUI for editing and testing GraphQL queries and mutations )
 - [Postman app](https://www.getpostman.com/downloads/)
 
-**If you use `GraphiQL app` for testing be sure to run the server using `rails s -b 127.0.0.1 -p 3000` otherwise you'll see the error in app*
+### Unsplash API
 
-1 challenge
-----
-The first challenge for you is to get images data from Unsplash API.
+Resolving challenges will required using Unsplash API to get some image data. In order to use their API please sign up and register a new app:
 
-First of all please sign up and register new app 
-- sign up at [unsplash.com](https://unsplash.com/)
-- create [new application](https://unsplash.com/oauth/applications)
+- Sign up at [unsplash.com](https://unsplash.com/)
+- Create [new application](https://unsplash.com/oauth/applications)
 - Copy your Access Key. You'll need it for sending the requests
-- Check out the [API documentation](https://unsplash.com/documentation#schema). You will need only Public Actions
-- Unsplash API has limitation of [50 requests per hour](https://unsplash.com/documentation#rate-limiting). 
-If you reach the limit you can simply create another application and use second Access Key
+- Check out the [API documentation](https://unsplash.com/documentation#schema), You will need only Public Actions
 
-Now you are ready to start coding!
+Please be aware that Unsplash API has limitation of [50 requests per hour](https://unsplash.com/documentation#rate-limiting). If you're having trouble with the limit, you can consider using some mock solution to overcome it.
 
---------
+## Summary
 
-- create resolver which sends the request to [search endpoint](https://unsplash.com/documentation#search-photos) with `query`, `page` and `per_page` arguments
-- use `HTTParty` gem for sending requests to Unsplash API
-- it should return the same response as below(be sure you are returning exact response fields)
+### What are we looking for?
 
-#### Query
-```
-query UnsplashImages {
-  unsplashImages(query: "nature", page: 1, perPage: 5) {
-    total
-    totalPages
-    results {
-      id
-      description
-      height
-      width
-      urls {
-        raw
-        small
-        thumb
-      }
-      user {
-        id
-        name
-        username
-        firstName
-        lastName
-      }
-      createdAt
-    }
-  }
-}
-```
+**Clarity** - We are looking for a code than can be understood right away by every developer in the team
 
-#### Response
+**Simplicity** - We prefer to start from simple, easily-extendable solutions instead of building complex constructions that will never be used
 
-```
-{
-  "data": {
-    "unsplashImages": {
-      "total": 247916,
-      "totalPages": 49584,
-      "results": [
-        {
-          "id": "cssvEZacHvQ",
-          "description": "Bridge over a green waterfall",
-          "height": 6000,
-          "width": 4000,
-          "urls": {
-            "raw": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "small": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "thumb": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ"
-          },
-          "user": {
-            "id": "8xWqhQl506k",
-            "name": "Blake Richard Verdoorn",
-            "username": "blakeverdoorn",
-            "firstName": "Blake Richard",
-            "lastName": "Verdoorn"
-          },
-          "createdAt": "2015-05-31T11:42:52-04:00"
-        },
-        {
-          "id": "4rDCa5hBlCs",
-          "description": "Looking up",
-          "height": 5473,
-          "width": 3654,
-          "urls": {
-            "raw": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "small": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "thumb": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ"
-          },
-          "user": {
-            "id": "q3J4y6ukHWk",
-            "name": "Casey Horner",
-            "username": "mischievous_penguins",
-            "firstName": "Casey",
-            "lastName": "Horner"
-          },
-          "createdAt": "2017-12-21T01:05:50-05:00"
-        },
-        {
-          "id": "oR0uERTVyD0",
-          "description": null,
-          "height": 4673,
-          "width": 2626,
-          "urls": {
-            "raw": "https://images.unsplash.com/photo-1540206395-68808572332f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "small": "https://images.unsplash.com/photo-1540206395-68808572332f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "thumb": "https://images.unsplash.com/photo-1540206395-68808572332f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ"
-          },
-          "user": {
-            "id": "2am9AbdXmss",
-            "name": "Shifaaz shamoon",
-            "username": "sotti",
-            "firstName": "Shifaaz",
-            "lastName": "shamoon"
-          },
-          "createdAt": "2018-10-22T07:07:04-04:00"
-        },
-        {
-          "id": "eOpewngf68w",
-          "description": "Whangarei Falls footbridge",
-          "height": 3648,
-          "width": 5472,
-          "urls": {
-            "raw": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "small": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "thumb": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ"
-          },
-          "user": {
-            "id": "-tFuGwqXda0",
-            "name": "Tim Swaan",
-            "username": "timswaanphotography",
-            "firstName": "Tim",
-            "lastName": "Swaan"
-          },
-          "createdAt": "2015-11-17T04:37:46-05:00"
-        },
-        {
-          "id": "tGTVxeOr_Rs",
-          "description": "This is the first photo I am uploading to unsplash.com - I’ve been taking photos actively for the last 15 years, and despite having a vast collection of thousands of images from all parts of the world, I have never really sold any. I love the idea of sharing free images for those who cannot afford to pay for them. I also believe that those who can afford to pay for a photo, and appreciate the efforts of a photographer will be happy to compensate the photographer when they use one for commercial purposes. Here is a free image of a tree - if you use it, please follow my Instagram @niko.photos :)",
-          "height": 2494,
-          "width": 3741,
-          "urls": {
-            "raw": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "small": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-            "thumb": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ"
-          },
-          "user": {
-            "id": "CIwKmxLlgQc",
-            "name": "niko photos",
-            "username": "niko_photos",
-            "firstName": "niko",
-            "lastName": "photos"
-          },
-          "createdAt": "2017-08-07T01:17:24-04:00"
-        }
-      ]
-    }
-  }
-}
-```
+**Attention to detail** - Try to think of all possible real-world use cases to prevent number of bugs and improve user exeperience once feature goes live
 
-------
+### Rules
 
-- create resolver which sends the request to [get a photo endpoint](https://unsplash.com/documentation#get-a-photo) with `id` argument
-- use `HTTParty` gem for sending requests to Unsplash API
-- it should return the same response as below(be sure you are returning exact response fields)
+* We prefer fully-baked, correct solutions that will make our engineer souls happy, so please take your time - there is no strict time limit
 
-### Query
+* At the same time please don't overdo it - if your solution does what is required, and you're happy with it, most probably we will be too
 
-```
-query UnsplashImage {
-  unsplashImage(id: "cssvEZacHvQ") {
-    id
-    description
-    height
-    width
-    urls {
-      raw
-      small
-      thumb
-    }
-    user {
-      id
-      name
-      username
-      firstName
-      lastName
-    }
-    createdAt
-  }
-}
+* Submit the challenges via [git format-patch](https://git-scm.com/docs/git-format-patch) to our development team (dev@medspoke.com)
 
-```
+### What happens after submission?
 
-### Response
-```
-{
-  "data": {
-    "unsplashImage": {
-      "id": "cssvEZacHvQ",
-      "description": "Bridge over a green waterfall",
-      "height": 6000,
-      "width": 4000,
-      "urls": {
-        "raw": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-        "small": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ",
-        "thumb": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjg4OTg3fQ"
-      },
-      "user": {
-        "id": "8xWqhQl506k",
-        "name": "Blake Richard Verdoorn",
-        "username": "blakeverdoorn",
-        "firstName": "Blake Richard",
-        "lastName": "Verdoorn"
-      },
-      "createdAt": "2015-05-31T11:42:52-04:00"
-    }
-  }
-}
-```
-2 challenge
------
-Try to load the collection of Posts along with authors data. If you see any problems with this request try to improve it.
+Once you submit your solution to us via `git format-patch`, our dev team will review the code. It might take us up to 1 week to get back to you with some feedback. If your solution is accepted, we will invite you for a next step of the recruitment process.
 
+## Have a great time coding, and we're looking forward for your submission!
 
-### Query
-
-```
-query Posts {
-  posts {
-    id
-    title
-    body
-    author {
-      id
-      email
-      fullName
-    }
-  }
-}
-
-```
-
-3 challenge
------
-TODO
+![force](https://media.giphy.com/media/l49JHz7kJvl6MCj3G/giphy.gif)
