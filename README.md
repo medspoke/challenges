@@ -88,6 +88,8 @@ Please be aware that Unsplash API has limitation of [50 requests per hour](https
 
 * At the same time please don't overdo it - if your solution does what is required, and you're happy with it, most probably we will be too
 
+* Communicating with other developers during the challenge is *strictly forbidden* - we would love to know your personal skills, and don't worry if you can't solve some tasks - nobody knows everything!
+
 * Submit the challenges via [git format-patch](https://git-scm.com/docs/git-format-patch) to our development team (dev@medspoke.com)
 
 ### What happens after submission?
