@@ -7,7 +7,7 @@ module.exports = (env) => {
 
   const paths = {
     build: resolvePath('build'),
-    entry: resolvePath('src/index.js'),
+    entry: resolvePath('src/ImageRoutes.js'),
     template: resolvePath('src/index.template.html'),
     src: resolvePath('src'),
     favicon: resolvePath('src/images/favicon.ico'),
@@ -101,7 +101,8 @@ module.exports = (env) => {
         watchContentBase: true,
         progress: true,
         hot: true,
-        inline: true
+        inline: true,
+        historyApiFallback: true
       },
       module: { rules }
     }
