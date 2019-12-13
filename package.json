@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "App for testing react/redux/apollo skills",
   "main": "index.js",
+  "engines": {
+    "node": ">=13.3.0",
+    "yarn": ">=1.19.1"
+  },
   "scripts": {
     "start": "webpack-dev-server --mode development --config config/webpack.config.js --progress --hot",
     "build": "webpack"
