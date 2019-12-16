@@ -1,0 +1,15 @@
+fragment ImageAttributes on Image {
+  id
+  description
+  height
+  width
+  source
+  likes
+  sourceLikes
+  totalLikes
+  url {
+    raw
+    small
+    thumb
+  }
+}

@@ -1,0 +1,10 @@
+#import './fragments/imageFragment.graphql'
+
+query Images {
+  images {
+    data {
+      ...ImageAttributes
+    }
+    totalCached
+  }
+}
