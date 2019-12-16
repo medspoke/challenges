@@ -1,9 +1,18 @@
 #import './fragments/imageFragment.graphql'
+#import './fragments/authorFragment.graphql'
 
-query Images {
-  images {
+query Images(
+  $source: String,
+  $search: String,
+  $page: Int,
+  $perPage: Int,
+) {
+  images(source: $source, search: $search, page: $page, perPage: $perPage) {
     data {
       ...ImageAttributes
+      author {
+        ...AuthorAttributes
+      }
     }
     totalCached
   }
