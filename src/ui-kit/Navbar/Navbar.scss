@@ -1,0 +1,15 @@
+@import "~styles/colors";
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  color: $dark;
+  .heading {
+    font-weight: bold;
+  }
+  .actions {
+    > p {
+      margin: 0;
+    }
+  }
+}

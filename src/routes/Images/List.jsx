@@ -20,6 +20,7 @@ const List = (props) => {
       <div className={classes.imagesContainer}>
         {images.map(image => (
           <ImageCard
+            key={image.id}
             imageURL={image.url.small}
             title={`@${image.author.username}`}
             subtitle={image.description}
