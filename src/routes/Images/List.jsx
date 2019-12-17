@@ -1,16 +1,22 @@
 import React from 'react'
+import PT from 'prop-types'
 import { connect } from 'react-redux'
+import { map } from 'lodash'
 import { useQuery } from '@apollo/react-hooks'
 import { Images } from 'queries/images.graphql'
 import { ImageCard } from 'ui-kit'
-import { selectImageSearch } from 'modules/image/image'
+import { selectImageSearch, saveImageIds } from 'modules/image/image'
 import classes from './Images.scss'
 
 const mapStateToProps = (state) => ({
   searchValue: selectImageSearch(state)
 })
 
-const List = ({ searchValue }) => {
+const actions = {
+  saveImageIds
+}
+
+const List = ({ searchValue, saveImageIds, history }) => {
   const { loading, error, data } = useQuery(Images, {
     variables: { source: 'unsplash', page: 1, perPage: 80, search: searchValue },
   })
@@ -19,6 +25,7 @@ const List = ({ searchValue }) => {
   if (error) return <p>Error...</p>
 
   const images = data.images.data
+  if (images.length) saveImageIds(map(images, 'id')) // save image ids to the redux store
   console.log(images)
   return (
       <div className={classes.imagesContainer}>
@@ -29,10 +36,21 @@ const List = ({ searchValue }) => {
             title={`@${image.author.username}`}
             subtitle={image.description}
             classNames={classes.imageItem}
+            handleClick={() => history.push(`images/${image.id}`)}
           />
         ))}
       </div>
   )
 }
 
-export default connect(mapStateToProps)(List)
+List.propTypes = {
+  saveImageIds: PT.func.isRequired,
+  searchValue: PT.string,
+}
+
+List.defaultProps = {
+  searchValue: '',
+}
+
+
+export default connect(mapStateToProps, actions)(List)

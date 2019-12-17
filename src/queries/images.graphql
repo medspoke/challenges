@@ -17,3 +17,9 @@ query Images(
     totalCached
   }
 }
+
+query Image($id: ID!) {
+  image(id: $id) {
+    ...ImageAttributes
+  }
+}

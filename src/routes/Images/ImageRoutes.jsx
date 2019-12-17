@@ -8,7 +8,7 @@ export const ImageRoutes = () => (
     <Route path='/images' exact component={List} />
     <Route
       path='/images/:imageId'
-      render={({ match }) => <View imageId={match.params.imageId} />}
+      render={(props) => <View {...props} imageId={props.match.params.imageId} />}
     />
   </>
 )
