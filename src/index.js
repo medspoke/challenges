@@ -1,10 +1,11 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks'
-// import { createBrowserHistory } from "history"
 import App from './components/App'
+import configureStore from 'store'
 import { ImageRoutes } from './routes'
 import PageNotFound from "./components/PageNotFound"
 import { List as ImagesList } from "./routes/Images"
@@ -12,19 +13,22 @@ import { List as ImagesList } from "./routes/Images"
 const client = new ApolloClient({
   uri: 'http://localhost:3000/api/graphql',
 })
-// const browserHistory = createBrowserHistory();
+
+const store = configureStore()
 const appContent = (
-  <App>
-    <ApolloProvider client={client}>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
       <BrowserRouter>
-        <Switch>
-          <Route path='/' exact component={ImagesList} />
-          <Route path='/images' component={ImageRoutes} />
-          <Route component={PageNotFound} />
-        </Switch>
+        <App>
+          <Switch>
+            <Route path='/' exact component={ImagesList} />
+            <Route path='/images' component={ImageRoutes} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </App>
       </BrowserRouter>
-    </ApolloProvider>
-  </App>
+    </Provider>
+  </ApolloProvider>
 )
 const MOUNT_NODE = document.getElementById('app')
 

@@ -1,14 +1,18 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
 import { Images } from 'queries/images.graphql'
-import { getParamValue } from 'utils'
 import { ImageCard } from 'ui-kit'
+import { selectImageSearch } from 'modules/image/image'
 import classes from './Images.scss'
 
-const List = (props) => {
-  const searchQuery = getParamValue(props.location, 'search')
+const mapStateToProps = (state) => ({
+  searchValue: selectImageSearch(state)
+})
+
+const List = ({ searchValue }) => {
   const { loading, error, data } = useQuery(Images, {
-    variables: { source: 'unsplash', page: 1, perPage: 80 },
+    variables: { source: 'unsplash', page: 1, perPage: 80, search: searchValue },
   })
 
   if (loading) return <p>Loading...</p>
@@ -31,4 +35,4 @@ const List = (props) => {
   )
 }
 
-export default List
+export default connect(mapStateToProps)(List)
