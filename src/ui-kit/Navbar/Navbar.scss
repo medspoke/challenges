@@ -6,6 +6,10 @@
   color: $dark;
   .heading {
     font-weight: bold;
+    a {
+      color: $dark;
+      text-decoration: none;
+    }
   }
   .actions {
     > p {

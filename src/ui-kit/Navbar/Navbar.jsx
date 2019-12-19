@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import {
   Button,
   Navbar as BlueprintNavbar,
@@ -39,7 +40,7 @@ const Navbar = (props) => {
         )}
       </BlueprintNavbar.Group>
       <BlueprintNavbar.Group className={classes.heading}>
-        <BlueprintNavbar.Heading>IMAGO</BlueprintNavbar.Heading>
+        <Link to="/"><BlueprintNavbar.Heading>IMAGO</BlueprintNavbar.Heading></Link>
       </BlueprintNavbar.Group>
       <BlueprintNavbar.Group className={classes.actions} align={Alignment.RIGHT}>
         <p>Hello, stranger!</p>
