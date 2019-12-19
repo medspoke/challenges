@@ -3,7 +3,7 @@ import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
 import { Icon } from "@blueprintjs/core"
-import { Image } from 'queries/images.graphql'
+import { Image as ImageQuery } from 'queries/images.graphql'
 import { selectPrevImageId, selectNextImageId } from 'modules/image/image'
 import cx from 'classnames'
 import classes from './Images.scss'
@@ -38,7 +38,7 @@ const View = ({ imageId, prevImageId, nextImageId, history }) => {
     />)
   }
 
-  const { loading, error, data } = useQuery(Image, { variables: { id: imageId } })
+  const { loading, error, data } = useQuery(ImageQuery, { variables: { id: imageId } })
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error...</p>

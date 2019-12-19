@@ -23,3 +23,15 @@ query Image($id: ID!) {
     ...ImageAttributes
   }
 }
+
+mutation CreateImage($data: Image_Attributes!) {
+  createImage(data: $data) {
+    ...ImageAttributes
+  }
+}
+
+mutation UpdateImage($id: ID!, $data: Image_Attributes!) {
+  updateImage(id: $id, data: $data) {
+    ...ImageAttributes
+  }
+}

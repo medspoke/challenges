@@ -7,7 +7,7 @@ import {
   Navbar as BlueprintNavbar,
   Alignment,
   InputGroup
-} from "@blueprintjs/core";
+} from "@blueprintjs/core"
 import classes from './Navbar.scss'
 import { applySearch, selectImageSearch } from 'modules/image/image'
 
@@ -45,7 +45,9 @@ const Navbar = (props) => {
       <BlueprintNavbar.Group className={classes.actions} align={Alignment.RIGHT}>
         <p>Hello, stranger!</p>
         <BlueprintNavbar.Divider />
-        <Button className="bp3-minimal" icon="plus" text="Add image" />
+        <Link to="/images/new">
+          <Button className="bp3-minimal" icon="plus" text="Add image" />
+        </Link>
       </BlueprintNavbar.Group>
     </BlueprintNavbar>
   )
