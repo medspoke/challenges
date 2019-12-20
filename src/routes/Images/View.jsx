@@ -2,11 +2,13 @@ import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
-import { Icon } from "@blueprintjs/core"
+import { Navbar } from 'ui-kit'
+import { Button, Icon, Alignment, Navbar as BlueprintNavbar } from "@blueprintjs/core"
 import { Image as ImageQuery } from 'queries/images.graphql'
 import { selectPrevImageId, selectNextImageId } from 'modules/image/image'
 import cx from 'classnames'
 import classes from './Images.scss'
+import { Link } from "react-router-dom"
 
 const mapStateToProps = (state, ownProps) => ({
   prevImageId: selectPrevImageId(state, ownProps.imageId),
@@ -46,10 +48,23 @@ const View = ({ imageId, prevImageId, nextImageId, history }) => {
   const image = data.image
 
   return (
-    <div className={classes.imageBackground} style={{ 'backgroundImage': `url(${image.url.raw})` }}>
-      {renderPrevImageButton()}
-      {renderNextImageButton()}
-    </div>
+    <>
+      <Navbar className={classes.navbar}>
+        <BlueprintNavbar.Group>
+          <span className={classes.navbarHeading}>{image.description} -- </span>
+          <span className={classes.navbarSubheading}> by @{image.author.username}</span>
+        </BlueprintNavbar.Group>
+        <BlueprintNavbar.Group align={Alignment.RIGHT}>
+          <Link to="/">
+            <Button className="bp3-minimal" text="Back" />
+          </Link>
+        </BlueprintNavbar.Group>
+      </Navbar>
+      <div className={classes.imageBackground} style={{ 'backgroundImage': `url(${image.url.raw})` }}>
+        {renderPrevImageButton()}
+        {renderNextImageButton()}
+      </div>
+    </>
   )
 }
 

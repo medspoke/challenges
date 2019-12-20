@@ -4,19 +4,32 @@ import { connect } from 'react-redux'
 import { map } from 'lodash'
 import { useQuery } from '@apollo/react-hooks'
 import { Images } from 'queries/images.graphql'
-import { ImageCard } from 'ui-kit'
-import { selectImageSearch, saveImageIds } from 'modules/image/image'
+import { ImageCard, Navbar } from 'ui-kit'
+import { selectImageSearch, saveImageIds, applySearch } from 'modules/image/image'
 import classes from './Images.scss'
+
+import { Link } from 'react-router-dom'
+import {
+  Button,
+  Navbar as BlueprintNavbar,
+  Alignment,
+  InputGroup
+} from "@blueprintjs/core"
 
 const mapStateToProps = (state) => ({
   searchValue: selectImageSearch(state)
 })
 
 const actions = {
-  saveImageIds
+  saveImageIds,
+  applySearch
 }
 
-const List = ({ searchValue, saveImageIds, history }) => {
+const List = ({ searchValue, saveImageIds, history, applySearch }) => {
+  const handleSearch = (searchValue) => {
+    applySearch(searchValue)
+  }
+
   const { loading, error, data } = useQuery(Images, {
     variables: { source: 'unsplash', page: 1, perPage: 80, search: searchValue },
   })
@@ -26,8 +39,29 @@ const List = ({ searchValue, saveImageIds, history }) => {
 
   const images = data.images.data
   if (images.length) saveImageIds(map(images, 'id')) // save image ids to the redux store
-  console.log(images)
   return (
+    <>
+      <Navbar>
+        <BlueprintNavbar.Group>
+          <InputGroup
+            leftIcon="search"
+            onChange={({ target }) => handleSearch(target.value)}
+            placeholder="Search..."
+            // rightElement={maybeSpinner}
+            value={searchValue}
+          />
+        </BlueprintNavbar.Group>
+        <BlueprintNavbar.Group className={classes.navbarHeading}>
+          <Link to="/"><BlueprintNavbar.Heading>IMAGO</BlueprintNavbar.Heading></Link>
+        </BlueprintNavbar.Group>
+        <BlueprintNavbar.Group className={classes.navbarActions} align={Alignment.RIGHT}>
+          <p>Hello, stranger!</p>
+          <BlueprintNavbar.Divider />
+          <Link to="/images/new">
+            <Button className="bp3-minimal" icon="plus" text="Add image" />
+          </Link>
+        </BlueprintNavbar.Group>
+      </Navbar>
       <div className={classes.imagesContainer}>
         {images.map(image => (
           <ImageCard
@@ -40,6 +74,7 @@ const List = ({ searchValue, saveImageIds, history }) => {
           />
         ))}
       </div>
+    </>
   )
 }
 

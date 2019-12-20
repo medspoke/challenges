@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import PT from 'prop-types'
-import { Navbar } from 'ui-kit'
 import styles from '../styles/app.scss'
 
 class App extends Component {
@@ -11,7 +10,6 @@ class App extends Component {
   render() {
     return (
       <div className={styles.app}>
-        <Navbar withSearch />
         {this.props.children}
       </div>
     )

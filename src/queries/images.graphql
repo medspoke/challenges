@@ -21,6 +21,9 @@ query Images(
 query Image($id: ID!) {
   image(id: $id) {
     ...ImageAttributes
+    author {
+      ...AuthorAttributes
+    }
   }
 }
 
