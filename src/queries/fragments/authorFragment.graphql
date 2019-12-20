@@ -1,7 +1,4 @@
 fragment AuthorAttributes on Author {
   id
   username
-  firstName
-  lastName
-  fullName
 }
