@@ -67,7 +67,7 @@ const List = ({ searchValue, saveImageIds, history, applySearch }) => {
           <ImageCard
             key={image.id}
             imageId={image.id}
-            imageURL={image.url.small || image.url.raw}
+            imageURL={image.url.raw}
             title={`@${image.author.username}`}
             subtitle={image.description}
             classNames={classes.imageItem}
