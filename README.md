@@ -8,11 +8,20 @@ This is not a production project, and it's used for purpose of interviewing. Ple
 
 ## Getting Started
 
-### Development
-
+### Installation
 1. Clone the project
 2. Install all required technologies using `yarn`
 3. Use `yarn start` to run the server on http://localhost:8080/
+
+### Design
+- The designs you can find on [invisionapp](https://projects.invisionapp.com/share/6MV1HI4PG45#/395487958_image_List)
+
+### Resetting the API data
+- API includes the `resetDatabase` mutation for cleaning the db up. So if you need to remove all the data from db due to testing or something else you can simply send the request on this endpoint.
+
+### LIMITATIONS
+- We use UNSPLASH API for loading images data to our local database. If our local images is not enough for getting the response of the query it will load missing images from UNSPLASH API(for example you have 100 images in db but you are requesting 3 page with 50 images per page. So it will load 50 images more from UNSPLASH API).
+ Pay attention that UNSPLASH API has limitations of 50 requests per hour and it returns error if the limitation is reached.
 
 ## Challenges
 1. There is a search bar but it works with a bug. Let's make it work this way:
@@ -27,10 +36,14 @@ This is not a production project, and it's used for purpose of interviewing. Ple
    - Fake login window should be opened when user tries to add a picture or update the picture data, but he is not logged in yet. “Logging in” is just a mock - save username to the redux and display it in the top bar.
    - After user is logged in, the text is changed to `Welcome, *username*` and there is an additional button for logging out.
 6. Please add the dropdown with authors to create and edit forms so the user can select the author of the image from our API.
-7. Implement error handling system:
+7. The code in Images create/edit forms are almost the same. Can you DRY it somehow?
+8. Implement error handling system:
    - it should handle and display validation errors in the forms
    - it should catch the network or other unexpected errors and redirect to 'error page' where user can see some hints how to solve the error(simple text with instructions how to clean up the cache/reload page/contact our support team if problem persists)
    - the error should be displayed when something goes wrong(e.x. images can’t be loaded, image can’t be saved, etc)
+9. Color themes:
+   - everybody likes the dark theme, right? Not really :) Let's add the color theme switcher and put it somewhere in the top bar so the user can switch to the light theme.
+   - the switcher should change the color of top bar and background to the light one and back
 
 ## Additional Information
 ### Tools
