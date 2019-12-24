@@ -4,17 +4,19 @@ import { connect } from 'react-redux'
 import { map } from 'lodash'
 import { useQuery } from '@apollo/react-hooks'
 import { Images } from 'queries/images.graphql'
-import { ImageCard, Navbar } from 'ui-kit'
-import { selectImageSearch, saveImageIds, applySearch } from 'modules/image/image'
-import classes from './Images.scss'
-
+import { Container, ImageCard, Navbar } from 'ui-kit'
 import { Link } from 'react-router-dom'
 import {
-  Button,
-  Navbar as BlueprintNavbar,
   Alignment,
-  InputGroup
+  Button,
+  Icon,
+  InputGroup,
+  Navbar as BlueprintNavbar,
 } from "@blueprintjs/core"
+import { selectImageSearch, saveImageIds, applySearch } from 'modules/image/image'
+import logoImage from 'images/logo.svg'
+import classes from './List.scss'
+import appClasses from 'styles/app.scss'
 
 const mapStateToProps = (state) => ({
   searchValue: selectImageSearch(state)
@@ -42,7 +44,7 @@ const List = ({ searchValue, saveImageIds, history, applySearch }) => {
   return (
     <>
       <Navbar>
-        <BlueprintNavbar.Group>
+        <BlueprintNavbar.Group align={Alignment.LEFT}>
           <InputGroup
             leftIcon="search"
             onChange={({ target }) => handleSearch(target.value)}
@@ -51,30 +53,35 @@ const List = ({ searchValue, saveImageIds, history, applySearch }) => {
             value={searchValue}
           />
         </BlueprintNavbar.Group>
-        <BlueprintNavbar.Group className={classes.navbarHeading}>
-          <Link to="/"><BlueprintNavbar.Heading>IMAGO</BlueprintNavbar.Heading></Link>
+        <BlueprintNavbar.Group align={Alignment.CENTER}>
+          <Link to="/">
+            <img src={logoImage} />
+          </Link>
         </BlueprintNavbar.Group>
-        <BlueprintNavbar.Group className={classes.navbarActions} align={Alignment.RIGHT}>
-          <p>Hello, stranger!</p>
+        <BlueprintNavbar.Group align={Alignment.RIGHT}>
+          <span className="bp3-text-small bp3-text-muted">Hello, stranger!</span>
           <BlueprintNavbar.Divider />
-          <Link to="/images/new">
-            <Button className="bp3-minimal" icon="plus" text="Add image" />
+          <Link to="/images/new" className={appClasses.noUnderline}>
+            <Button icon={<Icon icon="add" iconSize={14} />} text="Add image" />
           </Link>
         </BlueprintNavbar.Group>
       </Navbar>
-      <div className={classes.imagesContainer}>
-        {images.map(image => (
-          <ImageCard
-            key={image.id}
-            imageId={image.id}
-            imageURL={image.url.raw}
-            title={`@${image.author.username}`}
-            subtitle={image.description}
-            classNames={classes.imageItem}
-            handleClick={() => history.push(`images/${image.id}`)}
-          />
-        ))}
-      </div>
+      <Container>
+        <h4 className="bp3-heading bp3-dark">Browse images</h4>
+        <div className={classes.list}>
+          {images.map(image => (
+            <ImageCard
+              key={image.id}
+              imageId={image.id}
+              imageURL={image.url.raw}
+              title={`@${image.author.username}`}
+              subtitle={image.description}
+              className={classes.item}
+              handleClick={() => history.push(`images/${image.id}`)}
+            />
+          ))}
+        </div>
+      </Container>
     </>
   )
 }

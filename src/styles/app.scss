@@ -1,4 +1,12 @@
-@import "reset";
+// app styles
+
 @import "colors";
 @import "base";
-//@import "fonts";
+
+// global styles
+
+a.noUnderline {
+  &, &:hover {
+    text-decoration: none;
+  }
+}

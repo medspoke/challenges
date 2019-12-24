@@ -1,0 +1,13 @@
+@import "~styles/variables";
+
+.list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: $grid-size * 4 0;
+
+  .item {
+    width: 30%;
+    margin-bottom: $grid-size * 6;
+  }
+}

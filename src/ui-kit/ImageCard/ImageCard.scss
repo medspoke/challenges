@@ -1,4 +1,8 @@
+@import "~styles/variables";
 @import "~styles/colors";
+
+$imageCardHorizontalPadding: $grid-size * 1.5;
+$imageCardVerticalPadding: $grid-size;
 
 .imageCard {
   padding: 0;
@@ -6,22 +10,68 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  .titleRow {
+
+  .header {
+    flex: 0 0 auto;
     display: flex;
-    justify-content: space-between;
+    padding: $imageCardVerticalPadding $imageCardHorizontalPadding;
+
+    .content {
+      flex: 1 1 auto;
+      overflow: hidden;
+      cursor: pointer;
+
+      p {
+        width: 100%;
+        margin-bottom: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .actions {
+      flex: 0 0 auto;
+    }
   }
-  .title {
-    padding: 0.5rem 0.5rem 0 0.5rem;
-    font-size: 0.75rem;
-    color: $dark;
-  }
-  .subtitle {
-    padding: 0.1rem 0.5rem;
-    font-size: 0.65rem;
-    color: lighten($dark, 50%)
-  }
-  .editIcon {
-    color: $dark;
-    margin: 0.5rem;
+
+  .image {
+    flex: 0 0 200px;
+    display: block;
+    background-size: cover;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .highlight {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background-color: rgba($color: #ffffff, $alpha: 0.4);
+      padding: $imageCardHorizontalPadding;
+      display: none;
+
+      .icon {
+        width: $grid-size * 4;
+        height: $grid-size * 4;
+        background-color: $dark;
+        padding: $grid-size / 2;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          color: $white;
+        }
+      }
+    }
+
+    &:hover {
+      .highlight {
+        display: block;
+      }
+    }
   }
 }

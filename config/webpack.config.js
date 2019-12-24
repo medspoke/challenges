@@ -11,13 +11,39 @@ module.exports = (env) => {
     template: resolvePath('src/index.template.html'),
     src: resolvePath('src'),
     favicon: resolvePath('src/images/favicon.ico'),
+    images: resolvePath('src/images'),
+    styles: resolvePath('src/styles'),
+    uiKitStyles: resolvePath('src/ui-kit'),
+    routesStyles: resolvePath('src/routes'),
+    vendorStyles: resolvePath('src/styles/vendor'),
+  }
+
+  const styleLoader = {
+    loader: 'style-loader',
   }
 
   const sassLoader = {
     loader: 'sass-loader',
   }
 
-  const cssLoader = {
+  const baseCssLoader = {
+    loader: 'css-loader',
+  }
+
+  const postCssLoader = {
+    loader: 'postcss-loader',
+    options: {
+      plugins: function () {
+        return [
+          require('precss'),
+          require('autoprefixer')
+        ];
+      }
+    }
+  }
+
+
+  const moduleCssLoader = {
     loader: 'css-loader',
     options: {
       importLoaders: 1,
@@ -54,19 +80,38 @@ module.exports = (env) => {
       }
     },
     {
-      test: /\.s?css$/,
-      use: [extractPlugin, cssLoader, sassLoader],
+      test: /\.scss$/,
+      include: [paths.vendorStyles],
+      use: [styleLoader, baseCssLoader, postCssLoader, sassLoader],
+    },
+    {
+      test: /\.scss$/,
+      include: [paths.styles, paths.uiKitStyles, paths.routesStyles],
+      exclude: [paths.vendorStyles],
+      use: [extractPlugin, moduleCssLoader, sassLoader],
     },
     {
       test: /\.(png|svg|jpg|gif)$/,
-      exclude: [/\.s?css$/],
-      use: ["file-loader"]
+      include: [paths.images],
+      loader: "file-loader",
     },
     {
       test: /\.(graphql|gql)$/,
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
-    }
+    },
+    {
+      test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'fonts/'
+          }
+        }
+      ]
+    },
   ]
 
   const plugins = [
@@ -86,7 +131,7 @@ module.exports = (env) => {
       entry: paths.entry,
       mode: "development",
       output: {
-        publicPath: 'http://localhost:8080',
+        publicPath: 'http://localhost:8080/',
         path: paths.build,
         filename: '[name].js',
       },

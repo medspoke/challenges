@@ -1,8 +1,18 @@
 import React, { PureComponent } from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { Card, Elevation, Icon } from "@blueprintjs/core";
-import cx from 'classnames'
+import {
+  Button,
+  Card,
+  Elevation,
+  Icon,
+  Menu,
+  MenuItem,
+  Popover,
+  Position,
+} from "@blueprintjs/core";
+import cx from 'classnames';
+import missingImage from 'images/missing-image.png';
 import classes from './ImageCard.scss'
 
 class ImageCard extends PureComponent {
@@ -10,34 +20,54 @@ class ImageCard extends PureComponent {
     imageURL: PT.string.isRequired,
     title: PT.string.isRequired,
     subtitle: PT.string,
-    classNames: PT.string,
+    className: PT.string,
     handleClick: PT.func.isRequired,
     imageId: PT.string.isRequired
   }
 
   static defaultProps = {
     subtitle: null,
-    classNames: null,
+    className: null,
   }
 
+  renderCardMenu = () => (
+    <Menu>
+      <MenuItem
+        icon="edit"
+        text="Edit image"
+        onClick={() => this.props.history.push(`/images/${this.props.imageId}/edit`)}
+      />
+    </Menu>
+  )
+
   render = () => {
-    const { imageURL, title, subtitle, classNames, handleClick, imageId, history } = this.props
-    const cardClasses = cx(classNames, classes.imageCard)
+    const { imageURL, title, subtitle, className, handleClick } = this.props
+    const cardClasses = cx(classes.imageCard, 'bp3-borderless', className)
 
     return (
-      <Card className={cardClasses} interactive elevation={Elevation.TWO}>
-        <div className={classes.titleRow}>
-          <div className={classes.title}>{title}</div>
-          <Icon
-            icon="edit"
-            className={classes.editIcon}
-            iconSize={20}
-            interactive={'false'}
-            onClick={() => history.push(`/images/${imageId}/edit`)}
-          />
+      <Card className={cardClasses} elevation={Elevation.TWO}>
+        <div className={classes.header}>
+          <div className={classes.content} onClick={handleClick}>
+            <p className='bp3-text-large bp3-running-text'>{title}</p>
+            <p className='bp3-text-disabled bp3-running-text'>{subtitle || "---"}</p>
+          </div>
+          <div className={classes.actions}>
+            <Popover content={this.renderCardMenu()} position={Position.BOTTOM}>
+              <Button className="bp3-minimal" icon="more" minimal />
+            </Popover>
+          </div>
         </div>
-        <div className={classes.subtitle}>{subtitle}</div>
-        <img key={imageURL} src={imageURL} alt={imageURL} onClick={handleClick} />
+        <div
+          className={classes.image}
+          style={{ backgroundImage: `url(${imageURL}), url(${missingImage})` }}
+          onClick={handleClick}
+        >
+          <div className={classes.highlight}>
+            <div className={classes.icon}>
+              <Icon icon={'maximize'} iconSize={16} />
+            </div>
+          </div>
+        </div>
       </Card>
     )
   }
