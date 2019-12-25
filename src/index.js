@@ -11,7 +11,7 @@ import PageNotFound from "./components/PageNotFound"
 import { List as ImagesList } from "./routes/Images"
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/api/graphql',
+  uri: 'https://challenge-rails-api.herokuapp.com/api/graphql',
 })
 
 const store = configureStore()

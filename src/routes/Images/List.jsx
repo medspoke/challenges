@@ -74,7 +74,7 @@ const List = ({ searchValue, saveImageIds, history, applySearch }) => {
               key={image.id}
               imageId={image.id}
               imageURL={image.url.raw}
-              title={`@${image.author.username}`}
+              title={image.author ? `@${image.author.username}` : 'unknown'}
               subtitle={image.description}
               className={classes.item}
               handleClick={() => history.push(`images/${image.id}`)}
