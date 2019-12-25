@@ -5,14 +5,31 @@ import {
   Image as ImageQuery,
   UpdateImage as UpdateImageMutation
 } from 'queries/images.graphql'
-import { Navbar } from 'ui-kit'
+import {
+  Container,
+  Navbar,
+  Spacer,
+} from 'ui-kit'
+import {
+  Alignment,
+  Button,
+  Card,
+  ControlGroup,
+  Divider,
+  Elevation,
+  InputGroup,
+  FormGroup,
+  Navbar as BlueprintNavbar,
+  TextArea,
+} from "@blueprintjs/core"
+import { Link } from "react-router-dom"
+import appClasses from 'styles/app.scss'
 import classes from './Images.scss'
-import { FormGroup, InputGroup, TextArea, Button, Alignment, Navbar as BlueprintNavbar } from "@blueprintjs/core"
-import {Link} from "react-router-dom"
 
 const EditForm = (props) => {
   const { loading, error, data } = useQuery(ImageQuery, { variables: { id: props.imageId } })
   const image = data ? data.image : {}
+
 
   const [updateImage] = useMutation(UpdateImageMutation, {
     onCompleted: ({ updateImage }) => {
@@ -24,20 +41,20 @@ const EditForm = (props) => {
     !values.width ||
     !values.raw_url
 
-  const renderTextInput = (label, name, values, handleChange, type) => {
-    return (
-      <FormGroup
-        label={label}
-        labelFor={name}
-      >
-        <InputGroup
-          type={type}
-          name={name}
-          onChange={handleChange}
-          value={values[name]}
-        />
-      </FormGroup>
-    )
+  const renderTextInput = (label, name, values, handleChange, type, placeholder = '') => {
+    let content = <InputGroup
+      type={type}
+      name={name}
+      onChange={handleChange}
+      value={values[name]}
+      placeholder={placeholder}
+    />
+
+    if (label) {
+      content = <FormGroup label={label} labelFor={name}>{content}</FormGroup>
+    }
+
+    return content
   }
 
   if (loading) return <p>Loading...</p>
@@ -46,20 +63,36 @@ const EditForm = (props) => {
   return (
     <>
       <Navbar className={classes.navbar}>
-        <BlueprintNavbar.Group>
-          <span className={classes.navbarHeading}>{image.description} -- </span>
-          <span className={classes.navbarSubheading}> by @{image.author.username}</span>
+        <BlueprintNavbar.Group align={Alignment.LEFT} />
+        <BlueprintNavbar.Group align={Alignment.CENTER}>
+          <span className='bp3-ui-text bp3-running-text'>
+            {image.description || 'Untitled image'} — {' '}
+            <span className="bp3-text-disabled">by {image.author ? `@${image.author.username}` : 'unknown'}</span>
+          </span>
         </BlueprintNavbar.Group>
         <BlueprintNavbar.Group align={Alignment.RIGHT}>
-          <Link to="/">
-            <Button className="bp3-minimal" text="Back" />
+          <Button
+            large
+            minimal
+            icon="eye-open"
+            onClick={() => props.history.push(`/images/${props.imageId}`)}
+          />
+          <Divider className={"bp3-transparent"} />
+          <Link to="/" className={appClasses.noUnderline}>
+            <Button large icon="cross" />
           </Link>
         </BlueprintNavbar.Group>
       </Navbar>
-      <div className={classes.imageBackground} style={{ 'backgroundImage': `url(${image.url.raw})` }}>
-        <div className={classes.formContainer} >
-          <h3>Edit image</h3>
-          <Formik
+
+      <div className={classes.imageBackground} style={{ 'backgroundImage': `url(${image.url.raw})` }} />
+
+      <div className={classes.form}>
+        <Container>
+          <Card elevation={Elevation.TWO}>
+            <h3 className="bp3-heading">Edit image</h3>
+            <Spacer vertical />
+
+            <Formik
               initialValues={{
                 height: image.height || '',
                 width: image.width || '',
@@ -69,37 +102,52 @@ const EditForm = (props) => {
                 description: image.description || '',
               }}
               onSubmit={(values) => updateImage({ variables: { id: image.id, data: values } })}
-          >
-            {({
+            >
+              {({
                 values,
                 handleChange,
                 handleReset,
                 handleSubmit,
               }) => (
-                <form onSubmit={handleSubmit}>
-                  {renderTextInput('Height', 'height', values, handleChange, 'number')}
-                  {renderTextInput('Width', 'width', values, handleChange, 'number')}
-                  {renderTextInput('URL - Raw', 'raw_url', values, handleChange)}
-                  {renderTextInput('URL - Small', 'small_url', values, handleChange)}
-                  {renderTextInput('URL - Thumb', 'thumb_url', values, handleChange)}
-                  <FormGroup
+                  <form onSubmit={handleSubmit}>
+                    <FormGroup label='Image size'>
+                      <ControlGroup>
+                        {renderTextInput(null, 'height', values, handleChange, 'number', 'Height')}
+                        {renderTextInput(null, 'width', values, handleChange, 'number', 'Width')}
+                      </ControlGroup>
+                    </FormGroup>
+
+                    <Spacer vertical />
+
+                    <FormGroup
                       label='Description'
                       labelFor='description'
-                  >
-                    <TextArea
+                    >
+                      <TextArea
                         name='description'
                         growVertically
                         fill
                         onChange={handleChange}
                         value={values.description}
-                    />
-                  </FormGroup>
-                  <Button text='Reset' type='reset' onClick={handleReset} />
-                  <Button text='Update' type='submit' disabled={isSubmittable(values)} onClick={handleSubmit} intent='success' />
-                </form>
-            )}
-          </Formik>
-        </div>
+                      />
+                    </FormGroup>
+
+                    <Spacer vertical />
+
+                    {renderTextInput('URL - Raw', 'raw_url', values, handleChange)}
+                    {renderTextInput('URL - Small', 'small_url', values, handleChange)}
+                    {renderTextInput('URL - Thumb', 'thumb_url', values, handleChange)}
+
+                    <Spacer vertical />
+
+                    <Button large text='Reset' type='reset' onClick={handleReset} />
+                    <Spacer horizontal />
+                    <Button large text='Save' type='submit' disabled={isSubmittable(values)} onClick={handleSubmit} intent='success' />
+                  </form>
+                )}
+            </Formik>
+          </Card>
+        </Container>
       </div>
     </>
   )

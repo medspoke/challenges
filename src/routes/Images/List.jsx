@@ -66,7 +66,7 @@ const List = ({ searchValue, saveImageIds, history, applySearch }) => {
           </Link>
         </BlueprintNavbar.Group>
       </Navbar>
-      <Container>
+      <Container transparent>
         <h4 className="bp3-heading bp3-dark">Browse images</h4>
         <div className={classes.list}>
           {images.map(image => (

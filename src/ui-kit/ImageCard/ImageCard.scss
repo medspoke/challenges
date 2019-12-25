@@ -3,6 +3,7 @@
 
 $imageCardHorizontalPadding: $grid-size * 1.5;
 $imageCardVerticalPadding: $grid-size;
+$imageCardExpandIconSize: $grid-size * 4;
 
 .imageCard {
   padding: 0;
@@ -48,29 +49,55 @@ $imageCardVerticalPadding: $grid-size;
       width: 100%;
       height: 100%;
       display: block;
-      background-color: rgba($color: #ffffff, $alpha: 0.4);
-      padding: $imageCardHorizontalPadding;
-      display: none;
+      background-color: transparent;
+      transition: all 200ms;
+      overflow: hidden;
+      position: relative;
 
       .icon {
-        width: $grid-size * 4;
-        height: $grid-size * 4;
+        position: absolute;
+        top: $imageCardHorizontalPadding - ($imageCardExpandIconSize * 1.5 / 2);
+        left: $imageCardHorizontalPadding - ($imageCardExpandIconSize * 1.5 / 2);
+        width: $imageCardExpandIconSize * 1.5;
+        height: $imageCardExpandIconSize * 1.5;
+        opacity: 0;
         background-color: $dark;
         padding: $grid-size / 2;
         border-radius: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: all 250ms;
 
         svg {
+          position: relative;
+          display: block;
           color: $white;
+          width: $grid-size * 3;
+          height: $grid-size * 3;
+          opacity: 0;
+          transition: all 250ms;
         }
       }
     }
 
     &:hover {
       .highlight {
-        display: block;
+        background-color: mix($white, transparent, 30);
+
+        .icon {
+          top: $imageCardHorizontalPadding;
+          left: $imageCardHorizontalPadding;
+          height: $imageCardExpandIconSize;
+          width: $imageCardExpandIconSize;
+          opacity: 1;
+
+          svg {
+            width: $grid-size * 1.5;
+            height: $grid-size * 1.5;
+            opacity: 1;
+          }
+        }
       }
     }
   }

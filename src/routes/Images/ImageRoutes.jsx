@@ -1,4 +1,4 @@
-import React  from "react"
+import React from "react"
 import { Route, Switch } from "react-router-dom"
 import List from './List'
 import View from './View'

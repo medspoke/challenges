@@ -3,12 +3,19 @@ import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
 import { Navbar } from 'ui-kit'
-import { Button, Icon, Alignment, Navbar as BlueprintNavbar } from "@blueprintjs/core"
+import {
+  Alignment,
+  Button,
+  Icon,
+  Divider,
+  Navbar as BlueprintNavbar,
+} from "@blueprintjs/core"
 import { Image as ImageQuery } from 'queries/images.graphql'
 import { selectPrevImageId, selectNextImageId } from 'modules/image/image'
 import cx from 'classnames'
-import classes from './Images.scss'
 import { Link } from "react-router-dom"
+import appClasses from 'styles/app.scss'
+import classes from './Images.scss'
 
 const mapStateToProps = (state, ownProps) => ({
   prevImageId: selectPrevImageId(state, ownProps.imageId),
@@ -20,24 +27,29 @@ const View = ({ imageId, prevImageId, nextImageId, history }) => {
     history.push(`${imageId}`)
   }
   const renderPrevImageButton = () => {
-
-    if (!prevImageId) return null
-    return (<Icon
-      icon="chevron-left"
-      className={cx(classes.galleryControls, classes.galleryControls__prev)}
-      iconSize={20}
-      onClick={() => handleControlsClick(prevImageId)}
-    />)
+    if (!prevImageId) return <div className={cx(classes.pane, classes.left, classes.disabled)} />
+    return (
+      <div className={cx(classes.pane, classes.left)} onClick={() => handleControlsClick(prevImageId)}>
+        <Icon
+          icon="chevron-left"
+          className={cx(classes.arrow, classes.prev)}
+          iconSize={20}
+        />
+      </div>
+    )
   }
 
   const renderNextImageButton = () => {
-    if (!nextImageId) return null
-    return (<Icon
-      icon="chevron-right"
-      className={cx(classes.galleryControls, classes.galleryControls__next)}
-      iconSize={20}
-      onClick={() => handleControlsClick(nextImageId)}
-    />)
+    if (!nextImageId) return <div className={cx(classes.pane, classes.left, classes.disabled)} />
+    return (
+      <div className={cx(classes.pane, classes.right)} onClick={() => handleControlsClick(nextImageId)}>
+        <Icon
+          icon="chevron-right"
+          className={cx(classes.arrow, classes.next)}
+          iconSize={20}
+        />
+      </div>
+    )
   }
 
   const { loading, error, data } = useQuery(ImageQuery, { variables: { id: imageId } })
@@ -50,17 +62,30 @@ const View = ({ imageId, prevImageId, nextImageId, history }) => {
   return (
     <>
       <Navbar className={classes.navbar}>
-        <BlueprintNavbar.Group>
-          <span className={classes.navbarHeading}>{image.description} -- </span>
-          <span className={classes.navbarSubheading}> by @{image.author.username}</span>
+        <BlueprintNavbar.Group align={Alignment.LEFT} />
+        <BlueprintNavbar.Group align={Alignment.CENTER}>
+          <span className='bp3-ui-text bp3-running-text'>
+            {image.description || 'Untitled image'} — {' '}
+            <span className="bp3-text-disabled">by {image.author ? `@${image.author.username}` : 'unknown'}</span>
+          </span>
         </BlueprintNavbar.Group>
         <BlueprintNavbar.Group align={Alignment.RIGHT}>
-          <Link to="/">
-            <Button className="bp3-minimal" text="Back" />
+          <Button
+            large
+            minimal
+            icon="edit"
+            onClick={() => history.push(`/images/${imageId}/edit`)}
+          />
+          <Divider className={"bp3-transparent"} />
+          <Link to="/" className={appClasses.noUnderline}>
+            <Button large icon="cross" />
           </Link>
         </BlueprintNavbar.Group>
       </Navbar>
-      <div className={classes.imageBackground} style={{ 'backgroundImage': `url(${image.url.raw})` }}>
+
+      <div className={classes.imageBackground} style={{ 'backgroundImage': `url(${image.url.raw})` }} />
+
+      <div className={classes.galleryControls}>
         {renderPrevImageButton()}
         {renderNextImageButton()}
       </div>

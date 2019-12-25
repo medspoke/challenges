@@ -11,10 +11,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className={styles.app}>
+      <>
         {this.props.children}
         <Footer />
-      </div>
+      </>
     )
   }
 }
