@@ -25,7 +25,7 @@ Once you submit your solution to us via `git format-patch`, our dev team will re
 Pick the challange for a position that you wish to apply for:
 
 * Backend Developer (Ruby on Rails, GraphQL) - [challenge-rails](https://github.com/medspoke/challenges/tree/challenge-rails)
-* Frontend Developer (React, Redux, Apollo) - In progress
+* Frontend Developer (React, Redux, Apollo) - [challenge-react](https://github.com/medspoke/challenges/tree/challenge-react)
 
 ## Have a great time coding, and we're looking forward for your submission!
 
