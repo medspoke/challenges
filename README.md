@@ -4,26 +4,51 @@
 
 This project is a React application allowing users to query for nice pictures, upvote them and download. The core idea is to build the app where user can find and download any picture he wants, with user-friendly UI and good UX.
 
+Luckily, the API server is completed, so there is only frontend work left. Your task will be to update current frontend app according to the design specs by adding required funtionallity, fixing bugs and improving quality of the frontend code.  
+
 This is not a production project, and it's used for purpose of interviewing. Please read everything carefully before starting challenges, as below we will explain in detail how to run the project, what's expected and how to submit the results.
+
+![](https://raw.githubusercontent.com/medspoke/challenges/challenge-react/assets/imago-sceenshot.jpg)
 
 ## Getting Started
 
 ### Installation
+
 1. Clone the project
-2. Install all required technologies using `yarn`
-3. Use `yarn start` to run the server on http://localhost:8080/
+2. Install all required technologies
+3. Install depencencies: `yarn`
+4. Start the server: `yarn start`
+5. Open app at http://localhost:8080/
 
-### Design
-- The designs you can find on [invisionapp](https://projects.invisionapp.com/share/6MV1HI4PG45#/395487958_image_List)
+### GraphQL API specification
 
-### Resetting the API data
-- API includes the `resetDatabase` mutation for cleaning the db up. So if you need to remove all the data from db due to testing or something else you can simply send the request on this endpoint.
+The project uses API which is written in GraphQL and available here: https://challenge-rails-api.herokuapp.com/api/graphql You can find documentation of all available types and queries [under this link](http://react-challenge.medspoke.com/).
 
-### LIMITATIONS
-- We use UNSPLASH API for loading images data to our local database. If our local images is not enough for getting the response of the query it will load missing images from UNSPLASH API(for example you have 100 images in db but you are requesting 3 page with 50 images per page. So it will load 50 images more from UNSPLASH API).
- Pay attention that UNSPLASH API has limitations of 50 requests per hour and it returns error if the limitation is reached.
+#### Resetting the data
+During the development you might find yourself in the position where the amount of the data on the server becomes overwhelming and make testing difficult. In that case, you can use the `resetDatabase` mutation to remove all the data from the database and seed it with 90 sample images.
+
+#### Limitations
+
+The _Images_ query has a feature which autopopulates our backend database with new images whenever there's not enough images to fulfil user request. This is done using [Unsplash API](https://unsplash.com/developers). For example, if we have 100 images in our backend db but the user requests 120 images, those 20 missing images will be grabbed from Unsplash and saved on our server, and only after that returned to the user. However, it's important to keep in mind that Unsplash has a limitation of 50 requests per hour and it will return error if the limitation is reached.
+
+### Design specification
+
+#### Interactive prototype
+
+The following InVision prototype shows how the app should look like after you finish this challenge: https://invis.io/4KV1HIMEMCZ#/395490457_image_List 
+
+Please make sure you click through all of the screens carefully to understand what is the required UX/UI specification. You can either use left/right arrow keys to navigate, or click anywhere on a screen to find out where there _navigation hotspots_ are. 
+
+#### Source files
+
+You can download Sketch source with the above prototype here: ![imago_sketch.spec](https://github.com/medspoke/challenges/blob/challenge-react/assets/imago_spec.sketch?raw=true)
+
+#### Frontend framework
+
+We've built the app using [Blueprint](https://blueprintjs.com/docs/) frontend library, so whenever you need any component to finish the tasks below, their docs would be the first place to look.
 
 ## Challenges
+
 1. There is a search bar but it works with a bug. Let's make it work this way:
    - it should send the request when the input loses the focus or user didn't type anything for the last 3 seconds
    - if user deletes search it should immediately send the request to get all the images
@@ -46,21 +71,23 @@ This is not a production project, and it's used for purpose of interviewing. Ple
    - the switcher should change the color of top bar and background to the light one and back
 
 ## Additional Information
+
 ### Tools
 
 Useful tools for development:
 
-- [GraphiQL app](https://electronjs.org/apps/graphiql) (we highly recommend to use this GUI for editing and testing GraphQL queries and mutations )
-- [Postman app](https://www.getpostman.com/downloads/)
+- [GraphiQL app](https://electronjs.org/apps/graphiql) ‒ very useful GUI tool for editing and testing GraphQL queries and mutations
+- [Postman app](https://www.getpostman.com/downloads/) 
 
-Please, feel free to use any of the libraries/tools you want and refactor the code when you feel it's done in inappropriate way. You can even change the structure of the project if you want!
+Feel free to use any of the libraries/tools you want and refactor the code when you feel it's done in an inappropriate way. You can even change the structure of the project if you want! Sky's the limit.
+
 ## Summary
 
 ### What are we looking for?
 
 **Clarity** - We are looking for a code than can be understood right away by every developer in the team
 
-**Simplicity** - We prefer to start from simple, easily-extendable solutions instead of building complex constructions that will never be used
+**Simplicity** - We prefer to start from simple, easily-extendable solutions instead of building complex constructions that will never be used. We put a lot of emphasis on having correct components strucutre, since doing it right from the beginning results in a lot less of a headache later on.
 
 **Attention to detail** - Try to think of all possible real-world use cases to prevent number of bugs and improve user exeperience once feature goes live
 
@@ -76,7 +103,7 @@ Please, feel free to use any of the libraries/tools you want and refactor the co
 
 ### What happens after submission?
 
-Once you submit your solution to us via `git format-patch`, our dev team will review the code. It might take us up to 1 week to get back to you with some feedback. If your solution is accepted, we will invite you for a next step of the recruitment process.
+Once you submit your solution to us via `git format-patch`, our dev team will review the code. It might take us up to 1 week to get back to you with some feedback. If your solution is accepted, we will invite you for a next round of the recruitment process.
 
 ## Have a great time coding, and we're looking forward for your submission!
 
