@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Resolvers::GetAuthors < Base::Resolver
+  description 'Returns collection of all authors'
   argument :search, String
 
   type [Types::AuthorType]

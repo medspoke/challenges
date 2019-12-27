@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Types::AuthorType < Types::BaseObject
-  description 'The author record'
+  description 'The author of the image record'
 
   field :id, ID, null: false
   field :username, String, null: false

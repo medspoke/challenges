@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Mutations::Author::Update < Mutations::Rescuable
+  description 'mutation for updating author record'
   argument :id, ID, required: true
   argument :data, Types::Input::AuthorInputType, required: true
 

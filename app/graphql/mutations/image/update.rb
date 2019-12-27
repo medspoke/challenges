@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Mutations::Image::Update < Mutations::Rescuable
+  description 'mutation for updating image record'
   argument :id, ID, required: true
   argument :data, Types::Input::ImageInputType, required: true
 

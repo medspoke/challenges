@@ -7,10 +7,12 @@ describe Mutations::Author::Update, type: :graphql do
     subject(:mutation) { described_class.new(object: nil, context: context) }
 
     it { is_expected.to be_of_type(Types::AuthorType) }
-    it { is_expected.to accept_arguments(
-      id: types.ID.to_non_null_type,
-      data: Types::Input::AuthorInputType.to_non_null_type
-    ) }
+    it {
+      is_expected.to accept_arguments(
+        id: types.ID.to_non_null_type,
+        data: Types::Input::AuthorInputType.to_non_null_type
+      )
+    }
 
     context 'when all required params exist' do
       let(:args) do
@@ -49,13 +51,13 @@ describe Mutations::Author::Update, type: :graphql do
 
       it 'does not update author' do
         # pre-check
-        expect(Author.all.first.username).to eq author.username
+        expect(Author.first.username).to eq author.username
 
         # when
-        result = mutation.resolve(args)
+        mutation.resolve(args)
 
         # then
-        expect(Author.all.first.username).not_to eq 'captain_america'
+        expect(Author.first.username).not_to eq 'captain_america'
       end
     end
   end

@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 require 'rails_helper'
 require 'spec_helpers/request_helpers'
 require 'spec_helpers/graphql_helpers'

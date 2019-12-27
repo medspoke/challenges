@@ -4,10 +4,16 @@ class Image < ApplicationRecord
   validates_presence_of :height, :width, :raw_url
 
   scope :from_source, -> (source) {
-    where('images.source = ?', source)
+    where source: source
   }
 
-  scope :without_source, -> {
-    Image.from_source(nil)
+  scope :search, -> (query) {
+    joins('LEFT JOIN authors '\
+            'AS images_authors '\
+            'ON images.author_id = images_authors.id')
+      .where('images.source ILIKE :query OR images.description ILIKE :query OR ' \
+           'images_authors.first_name ILIKE :query OR images_authors.last_name ILIKE :query OR ' \
+           'images_authors.username ILIKE :query', query: "%#{query}%")
+      .references(:author)
   }
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Mutations::Image::Create < Mutations::Rescuable
+  description 'mutation for creating image record'
   argument :data, Types::Input::ImageInputType, required: true
 
   type Types::ImageType

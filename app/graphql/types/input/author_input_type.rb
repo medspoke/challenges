@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Types::Input::AuthorInputType < Base::Input
-  description 'The author input'
+  graphql_name 'Author_Attributes'
+  description 'The author input object which includes author fields'
 
   argument :username, String, required: true
   argument :first_name, String

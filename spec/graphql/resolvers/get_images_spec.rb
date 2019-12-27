@@ -10,9 +10,9 @@ describe Resolvers::GetImages, type: :graphql do
 
   describe '#call' do
     context 'when some images exist' do
-      let!(:image_1) { create :image }
-      let!(:image_2) { create :image }
-      let!(:image_3) { create :image }
+      let(:image_1) { create :image, source: 'medspoke' }
+      let(:image_2) { create :image, source: 'medspoke' }
+      let(:image_3) { create :image, source: nil }
 
       it 'returns all images' do
         # when
@@ -23,13 +23,9 @@ describe Resolvers::GetImages, type: :graphql do
       end
 
       context 'when some images are missing source' do
-        before do
-          image_3.source = nil
-        end
-
         context 'when querying for images with given source' do
           let(:args) do
-            { source: 'foo_images' }
+            { source: 'medspoke' }
           end
 
           it 'only returns images with given source' do
@@ -38,20 +34,6 @@ describe Resolvers::GetImages, type: :graphql do
 
             # then
             expect(images).to match_array([image_1, image_2])
-          end
-        end
-
-        context 'when querying for images without a source' do
-          let(:args) do
-            { no_source: true }
-          end
-
-          it 'only returns images without any source' do
-            # when
-            images = resolver.resolve(args)
-
-            # then
-            expect(images).to match_array([image_3])
           end
         end
       end

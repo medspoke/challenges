@@ -24,11 +24,11 @@ describe Resolvers::GetAuthors, type: :graphql do
       end
 
       context 'when search query is specified' do
-        let(:args) do
-          { args: { search: 'Foo' } }
-        end
+        context 'when none of authors matches the search query' do
+          let(:args) do
+            { args: { search: 'Foo' } }
+          end
 
-        it 'when none of authors matches the search query' do
           it 'returns empty array' do
             # when
             authors = resolver.resolve(args)
@@ -39,8 +39,8 @@ describe Resolvers::GetAuthors, type: :graphql do
         end
 
         context 'when first author matches the search query' do
-          before do
-            args[:search] = 'Arthur'
+          let(:args) do
+            { search: 'Arthur' }
           end
 
           let!(:searched_author) { create :author, first_name: 'Arthur' }

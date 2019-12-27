@@ -7,10 +7,12 @@ describe Mutations::Image::Update, type: :graphql do
     subject(:mutation) { described_class.new(object: nil, context: context) }
 
     it { is_expected.to be_of_type(Types::ImageType) }
-    it { is_expected.to accept_arguments(
-      id: types.ID.to_non_null_type,
-      data: Types::Input::ImageInputType.to_non_null_type
-    ) }
+    it {
+      is_expected.to accept_arguments(
+        id: types.ID.to_non_null_type,
+        data: Types::Input::ImageInputType.to_non_null_type
+      )
+    }
 
     context 'when all required params exist' do
       let(:args) do
@@ -53,13 +55,13 @@ describe Mutations::Image::Update, type: :graphql do
 
       it 'does not update image' do
         # pre-check
-        expect(Image.all.first.raw_url).to eq image.raw_url
+        expect(Image.first.raw_url).to eq image.raw_url
 
         # when
-        result = mutation.resolve(args)
+        mutation.resolve(args)
 
         # then
-        expect(Image.all.first.raw_url).not_to eq 'https://pics.com/image/123'
+        expect(Image.first.raw_url).not_to eq 'https://pics.com/image/123'
       end
     end
   end
