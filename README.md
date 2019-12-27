@@ -49,26 +49,49 @@ We've built the app using [Blueprint](https://blueprintjs.com/docs/) frontend li
 
 ## Challenges
 
-1. There is a search bar but it works with a bug. Let's make it work this way:
-   - it should send the request when the input loses the focus or user didn't type anything for the last 3 seconds
-   - if user deletes search it should immediately send the request to get all the images
-2. Currently user can see only 10 images. We need to lazy load images on scroll by sending the request to API when list is finished.
-3. User wants to upvote the image he likes. Let's add the button to like / unlike image and number of likes below each image. Make sure you are displaying total likes
-4. Every image can be 3 types - raw, small and thumb:
-   - Currently it displays raw image in the Image card. If raw image size is missed it should display the image in one of other available sizes.
-   - Let's add a button which opens dropdown with the list of available image sizes. When user selects the size of the image it should download the image of selected size.
-5. In the top bar you can see `Welcome, stranger` text. Let's create a fake authentication process:
-   - Fake login window should be opened when user tries to add a picture or update the picture data, but he is not logged in yet. “Logging in” is just a mock - save username to the redux and display it in the top bar.
-   - After user is logged in, the text is changed to `Welcome, *username*` and there is an additional button for logging out.
-6. Please add the dropdown with authors to create and edit forms so the user can select the author of the image from our API.
-7. The code in Images create/edit forms are almost the same. Can you DRY it somehow?
-8. Implement error handling system:
+1. There is a search bar which works, but unfortunately in a quirky way. Let's fix it little bit:
+  - it should not send the request right away, but rather wait until input loses the focus or user didn't type anything for  2 seconds
+  - if user deletes search it should immediately send the request to get all of the images
+  - there should be some visual an indicator of a query being executed (for example: loader in place of the search icon + adding some transperency to container with list of images)
+
+2. Customer has requested a feature which will allow users to upvote the images which they like. Backend is ready, so we only need to add it on the frontend side. Plase follow the designs and add the button to like / unlike images and show number of likes below each image.
+
+3. Currently, the list of images only shows first 10 images returned the server. Implement inifinite scroll solution which will:
+  - query & add to the list next 10 images whenever user scrolls to the end of a list
+  - show a loader circle below current images list whenever query is being executed (according to the designs)
+  - remember current position on the images list. If the user leaves the screen (for example to edit image data) and then comes back, he should still return to exactly the same position on the list and see the same images, as when he was leaving
+
+4. Image view (_/images/IMAGE_ID_) route opens a fullscreen image preview, which contains arrows to go to the next/previous image. However, there is a bug - when user refreshes the page, the arrows disappear. Please debug and fix it, making sure that:
+  - it's always possible to go to the next/previous image, even after refreshing the page
+  - user has always options to load a next image (similarly as in the infinite scroll from previous point - the images never finish, we query for new ones when necessary) 
+
+5. There is a lot of code repetition among create and edit image forms. Please refactor it according to DRY principles - make sure that both rendering code as well as business logic is reused between components whenever possible. 
+
+6. Both create and edit forms are missing a way to choose image author. Please add a select dropdown, which will:
+  - allow to select an author of an image
+  - by default load author collection from the server, but allow creating new authors as well
+
+7. The navigation bar contains `Welcome, stranger` text. We are planning to add user accounts support in the near future, but the backend is not ready. Because of that's, let's mock this feature in the frontend side for now as folows:
+  - UI should always be in one of two states: logged in / logged out
+  - if user is logged out:
+    - there is `Welcome, stranger` message shown in the navbar
+    - whenever user tries to add a picture or update the picture data, we interrupt and display a modal which prompts for his username. After submitting the modal we save the username in memory/local storage and from now on treat user as logged in 
+  - if user is logged in:
+    - there is `*icon* *username*` text shown in the navbar, which is clickable and displays popover with two options: _Add image_ and logout
+    - clicking logout option simply switches UI to logged out state
+    - when user opens new image form, the _Author_ dropdown value should be his username by default
+    - when user opens edit image form, the _Author_ dropdown value should allow to choose his username as one of the options
+
+8. Everybody likes the dark theme, right? Not really :) Let's add support for the color theme switcher:
+  - add a link next to copyright message in the bottom of the page, which will allow to switch the theme
+  - change the position of the copyright component to fixed in the bottom of the screen, so that it work well with infinite loading (otherwise users will never be able to change theme, because of new images being loaded)
+  - clicking the link should change the color of the navbar and of the background
+    - for the components displayed in the dark version of the navbar, you might consider using dark theme of Blueprint components
+
+9. _[BONUS]_ Implement error handling system:
    - it should handle and display validation errors in the forms
-   - it should catch the network or other unexpected errors and redirect to 'error page' where user can see some hints how to solve the error(simple text with instructions how to clean up the cache/reload page/contact our support team if problem persists)
-   - the error should be displayed when something goes wrong(e.x. images can’t be loaded, image can’t be saved, etc)
-9. Color themes:
-   - everybody likes the dark theme, right? Not really :) Let's add the color theme switcher and put it somewhere in the top bar so the user can switch to the light theme.
-   - the switcher should change the color of top bar and background to the light one and back
+   - if an action error happens, it should inform user about the problem using toast notification
+   - if a rendering error happens, it should redirect to an _error page_, where user can see some hints on what happened and how to solve the error (for example: simple text with instructions how to clean up the cache/reload page/contact our support team if problem persists)
 
 ## Additional Information
 
